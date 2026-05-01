@@ -51,7 +51,7 @@ def draw_jyuuryou(can, json_data):
     app_addr = cert.get("UserAddress", "")
     if app_addr in ["＊＊＊", "", "使用者住所に同じ"]:
         app_addr = cert.get("OwnerAddressChar", "") + cert.get("OwnerAddressNumValue", "")
-    
+   
     can.setFont(font_name, 10); can.drawString(72.0 * mm, 156 * mm, car_no)
     can.setFont(font_name, 15); can.drawString(160 * mm, 165 * mm, app_name)
     can.setFont(font_name, 13); t_addr = can.beginText(160 * mm, 155 * mm); t_addr.setCharSpace(0); t_addr.textLine(app_addr); can.drawText(t_addr)
@@ -69,15 +69,15 @@ def draw_page(can, json_data, manual_name, manual_addr):
         else: num = p
     raw_vin = cert.get("CarNo", "").replace("－", "-")
     vin_last = raw_vin.split("-")[-1] if "-" in raw_vin else raw_vin
-    
+   
     app_name = cert.get("UsernameLowLevelChar", "")
     if app_name in ["＊＊＊", "", "使用者に同じ"]: app_name = cert.get("OwnernameLowLevelChar", "")
     app_addr = cert.get("UserAddress", "")
     if app_addr in ["＊＊＊", "", "使用者住所に同じ"]: app_addr = cert.get("OwnerAddressChar", "") + cert.get("OwnerAddressNumValue", "")
-    
+   
     exm_name = manual_name if manual_name else app_name
     exm_addr = manual_addr if manual_addr else app_addr
-    
+   
     can.setFont(font_name, 24); t_area = can.beginText(13.0*mm, 170.0*mm); t_area.setCharSpace(6.5); t_area.textLine(area); can.drawText(t_area)
     can.setFont(font_name, 18); t_code = can.beginText(58.5*mm, 170.5*mm); t_code.setCharSpace(-1.0); t_code.textLine(code); can.drawText(t_code)
     can.setFont(font_name, 25); can.drawString(80.5*mm, 170.0*mm, hira)
@@ -98,19 +98,19 @@ def draw_meigi(can, json_data, user_name, s_name, s_addr, c12, c2, c10):
         else: num = p
     raw_vin = cert.get("CarNo", "").replace("－", "-")
     vin_last = raw_vin.split("-")[-1] if "-" in raw_vin else raw_vin
-    
+   
     app_name = cert.get("UsernameLowLevelChar", "")
-    if app_name in ["＊＊＊", "", "使用者に同じ"]: 
+    if app_name in ["＊＊＊", "", "使用者に同じ"]:
         app_name = cert.get("OwnernameLowLevelChar", "")
     app_address = cert.get("UserAddress", "")
     if app_address in ["＊＊＊", "", "使用者住所に同じ"]:
         app_address = cert.get("OwnerAddressChar", "") + cert.get("OwnerAddressNumValue", "")
-    
+   
     can.setFont(font_name, 20); t_area = can.beginText(14.0*mm, 156.0*mm); t_area.setCharSpace(10.0); t_area.textLine(area); can.drawText(t_area)
     can.setFont(font_name, 18); t_code = can.beginText(58.5*mm, 156.0*mm); t_code.setCharSpace(-1.2); t_code.textLine(code); can.drawText(t_code)
     can.setFont(font_name, 20); can.drawString(82.0*mm, 156.0*mm, hira)
     can.setFont(font_name, 18); can.drawString(93.5*mm, 156.0*mm, num); t_vin = can.beginText(131.5*mm, 156.0*mm); t_vin.setCharSpace(-1.0); t_vin.textLine(vin_last); can.drawText(t_vin)
-    
+   
     can.setFont(font_name, 22)
     start_x = 23.5; y_pos = 127.0; char_interval = 11.0
     for i, char in enumerate(user_name):
@@ -127,12 +127,12 @@ def draw_meigi(can, json_data, user_name, s_name, s_addr, c12, c2, c10):
 
     can.setFont(font_name, 15); can.drawString(150.0*mm, 15.0*mm, app_name)
     can.setFont(font_name, 7); t_addr = can.beginText(130.0*mm, 7.0*mm); t_addr.setCharSpace(-0.3); t_addr.textLine(app_address); can.drawText(t_addr)
-    
+   
     can.setFont(font_name, 35); can.drawString(50.0*mm, 10.0*mm, "同上"); can.drawString(160.0*mm, 30.0*mm, "同下")
     can.setFont(font_name, 15); can.drawString(50 * mm, 36 * mm, s_name); can.setFont(font_name, 10); can.drawString(22 * mm, 26 * mm, s_addr)
-    
+   
     can.setFont(font_name, 18); can.drawString(12.0*mm, 53.5*mm, "1"); can.drawString(12.0*mm, 72.5*mm, "1"); can.drawString(12.0*mm, 91.0*mm, "1")
-    
+   
     can.setFillColorRGB(0, 0, 0)
     can.setFont(font_name, 20)
     can.drawString(240 * mm, 10 * mm, "移転登録")
@@ -189,7 +189,6 @@ def draw_shinsa(can, json_data):
 # --- 4. Streamlit UI ---
 st.set_page_config(page_title="書類作成アプリ", layout="centered")
 
-# CSSでスマホ閲覧時のフォントサイズを調整
 st.markdown("""
 <style>
     .stButton>button { width: 100%; height: 3em; font-size: 1.2rem; }
@@ -201,15 +200,14 @@ saved_data = load_settings()
 
 st.title("🚜 車両登録書類 作成ツール")
 
-# サイドバー：設定入力
 with st.sidebar:
     st.header("⚙️ 固定情報の設定")
     with st.expander("継続申請用"):
         k_name = st.text_input("受検者 氏名", value=saved_data["k_name"])
         k_addr = st.text_area("受検者 住所", value=saved_data["k_addr"])
-    
+   
     with st.expander("名義変更・抹消用"):
-        m_name = st.text_input("新使用者 氏名(カナ)", value=saved_data["m_name"], help="名義変更のマス目用")
+        m_name = st.text_input("新使用者 氏名(カナ)", value=saved_data["m_name"])
         s_name = st.text_input("申請者 氏名", value=saved_data["s_name"])
         s_addr = st.text_area("申請者 住所", value=saved_data["s_addr"])
         c12 = st.text_input("12桁コード", value=saved_data["c12"])
@@ -224,7 +222,6 @@ with st.sidebar:
         st.success("保存しました！")
         st.rerun()
 
-# メイン画面：書類選択
 st.subheader("1. 作成する書類を選択")
 col1, col2 = st.columns(2)
 with col1:
@@ -243,45 +240,44 @@ if up_files:
         try:
             out = PdfWriter()
             page_added = False
-            
+           
             for f in up_files:
                 f.seek(0)
                 data = json.load(f)
-                
-                # 各書類の生成
+               
                 if do_jyu:
                     p = io.BytesIO(); c = canvas.Canvas(p, pagesize=(297*mm, 210*mm)); draw_jyuuryou(c, data); c.save()
                     p.seek(0); bg = PdfReader("重量税納付書.pdf").pages[0]; bg.merge_page(PdfReader(p).pages[0]); out.add_page(bg); page_added = True
-                
+               
                 if do_shi:
                     p = io.BytesIO(); c = canvas.Canvas(p, pagesize=(297*mm, 210*mm)); draw_shinsa(c, data); c.save()
-                    p.seek(0); bg = PdfReader("軽自動車　申請審査書.pdf").pages[0]; bg.merge_page(PdfReader(p).pages[0]); out.add_page(bg); page_added = True
-                
+                    p.seek(0); bg = PdfReader("軽自動車申請審査書.pdf").pages[0]; bg.merge_page(PdfReader(p).pages[0]); out.add_page(bg); page_added = True
+               
                 if do_kei:
                     p = io.BytesIO(); c = canvas.Canvas(p, pagesize=(210*mm, 297*mm)); draw_page(c, data, k_name, k_addr); c.save()
                     p.seek(0); bg = PdfReader("軽専用2号様式PDF.pdf").pages[0]; bg.merge_page(PdfReader(p).pages[0]); out.add_page(bg); page_added = True
-                
+               
                 if do_mei:
                     p = io.BytesIO(); c = canvas.Canvas(p, pagesize=(297*mm, 210*mm)); draw_meigi(c, data, m_name, s_name, s_addr, c12, c2, c10); c.save()
-                    p.seek(0); bg = PdfReader("軽　名義変更.pdf").pages[0]; bg.merge_page(PdfReader(p).pages[0]); out.add_page(bg); page_added = True
-                
+                    p.seek(0); 
+                    # --- ここを実際のGitHub上のファイル名に修正 ---
+                    bg = PdfReader("軽タイトル変更.pdf").pages[0] 
+                    bg.merge_page(PdfReader(p).pages[0]); out.add_page(bg); page_added = True
+               
                 if do_mas:
                     p = io.BytesIO(); c = canvas.Canvas(p, pagesize=(297*mm, 210*mm)); draw_massho(c, data, m_name, s_addr); c.save()
-                    p.seek(0); bg = PdfReader("軽自動車　一時抹消.pdf").pages[0]; bg.merge_page(PdfReader(p).pages[0]); out.add_page(bg); page_added = True
+                    p.seek(0); 
+                    # --- ここを実際のGitHub上のファイル名に修正 ---
+                    bg = PdfReader("軽自動車一時消去.pdf").pages[0] 
+                    bg.merge_page(PdfReader(p).pages[0]); out.add_page(bg); page_added = True
 
             if page_added:
                 buf = io.BytesIO()
                 out.write(buf)
                 st.success("PDFが完成しました！")
-                st.download_button(
-                    label="📥 PDFをダウンロード",
-                    data=buf.getvalue(),
-                    file_name="registration_docs.pdf",
-                    mime="application/pdf",
-                    use_container_width=True
-                )
+                st.download_button(label="📥 PDFをダウンロード", data=buf.getvalue(), file_name="registration_docs.pdf", mime="application/pdf", use_container_width=True)
             else:
                 st.warning("書類が一つも選択されていません。")
-                
+               
         except Exception as e:
             st.error(f"エラーが発生しました: {e}")
